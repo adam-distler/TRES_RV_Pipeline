@@ -158,3 +158,20 @@ def abs_rv(target,template,order=32,trim=0.15,synth_template=0,instrument='TRES'
     template.close()
     target.close()
     return abs_rv
+
+
+def abs_rv_complete(target,template,order_list=np.linspace(10,30,21),trim=0.15,synth_template=0,instrument='TRES',
+           minrv=-30.,maxrv=100,stepsize=0.05,smoothing=0,kw=3,fit='spline', printing=1):
+    RV_list = np.array([])
+    for ORD in order_list:
+        ORD =int(ORD)
+        rv = abs_rv(target,template,ORD,trim,synth_template,instrument,
+           minrv,maxrv,stepsize,smoothing,kw,fit, printing)
+        RV_list = np.append(RV_list, rv)
+    plt.plot(order_list, RV_list, color='black')
+    plt.title('Radial Velocity vs. Order')
+    plt.xlabel('Order')
+    plt.ylabel('Radial Velocity (km/s)')
+    median_rv = np.median(RV_list)
+    plt.show()
+    print('The median RV for this target is:', median_rv, 'km/s')
